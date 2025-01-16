@@ -13,10 +13,12 @@ import java.util.Locale;
  * @version 2.2
  *
  */
-public class Basket extends ArrayList<Product> implements Serializable
+public class Basket extends ArrayList<Product>
 {
-  private static final long serialVersionUID = 1;
+  //private static final long serialVersionUID = 1;
   private int    theOrderNum = 0;          // Order number
+  
+  private boolean discountApplied = false;
   
   /**
    * Constructor for a basket which is
@@ -35,6 +37,11 @@ public class Basket extends ArrayList<Product> implements Serializable
   public void setOrderNum( int anOrderNum )
   {
     theOrderNum = anOrderNum;
+  }
+  
+  //toggle discount
+  public void toggleDiscount() {
+	  discountApplied = !discountApplied;
   }
 
   /**
@@ -86,6 +93,18 @@ public class Basket extends ArrayList<Product> implements Serializable
         fr.format("\n");
         total += pr.getPrice() * number;
       }
+      
+      if ( (discountApplied) && (total > 0) ) {
+    	  double discountApplied = total * 0.1;
+    	  
+          fr.format("----------------------------\n");
+          fr.format("10%% Discount                ");
+          fr.format("%s%7.2f",    csign, discountApplied );
+          fr.format("\n");
+    	  total = total * 0.9;
+    	  
+      }
+      
       fr.format("----------------------------\n");
       fr.format("Total                       ");
       fr.format("%s%7.2f\n",    csign, total );

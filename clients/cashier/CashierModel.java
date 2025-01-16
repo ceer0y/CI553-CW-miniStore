@@ -1,6 +1,7 @@
 package clients.cashier;
 
 import catalogue.Basket;
+import catalogue.BetterBasket;
 import catalogue.Product;
 import debug.DEBUG;
 import middle.*;
@@ -156,6 +157,15 @@ public class CashierModel extends Observable
     theBasket = null;
     setChanged(); notifyObservers(theAction); // Notify
   }
+  
+  public void doDiscount()
+  {
+	  if(theBasket != null) {
+		  String theAction = "";
+		  theBasket.toggleDiscount();
+		  setChanged(); notifyObservers(theAction); // Notify
+		 }
+  }
 
   /**
    * ask for update of view callled at start of day
@@ -190,9 +200,9 @@ public class CashierModel extends Observable
    * return an instance of a new Basket
    * @return an instance of a new Basket
    */
-  protected Basket makeBasket()
+  protected BetterBasket makeBasket()
   {
-    return new Basket();
+    return new BetterBasket();
   }
 }
   

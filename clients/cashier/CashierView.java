@@ -16,7 +16,7 @@ import java.util.Observer;
  */
 public class CashierView implements Observer
 {
-  private static final int H = 300;       // Height of window pixels
+  private static final int H = 400;       // Height of window pixels
   private static final int W = 400;       // Width  of window pixels
   
   private static final String CHECK  = "Check";
@@ -31,10 +31,15 @@ public class CashierView implements Observer
   private final JButton     theBtCheck = new JButton( CHECK );
   private final JButton     theBtBuy   = new JButton( BUY );
   private final JButton     theBtBought= new JButton( BOUGHT );
+  private final JButton theBtDarkMode = new JButton("Dark Mode");
+  
+  private final JButton theBtDiscount = new JButton ("10% Discount");
+  
 
   private StockReadWriter theStock     = null;
   private OrderProcessing theOrder     = null;
   private CashierController cont       = null;
+  private boolean isDarkMode = false; // Tracks whether Dark Mode is enabled
   
   /**
    * Construct the view
@@ -80,6 +85,16 @@ public class CashierView implements Observer
     theBtBought.addActionListener(                  // Call back code
       e -> cont.doBought() );
     cp.add( theBtBought );                          //  Add to canvas
+    
+    // Add the Dark Mode button
+    theBtDarkMode.setBounds(274, 314, 100, 40); // Set position and size
+    theBtDarkMode.addActionListener(e -> toggleDarkMode(cp)); // Add action listener
+    cp.add(theBtDarkMode); // Add to canvas
+    
+    // Adding discount button
+    theBtDiscount.setBounds( 16, 25+60*2, 80, 40 ); // Position and size
+    theBtDiscount.addActionListener(e -> cont.doDiscount()); // Add action listener
+    cp.add(theBtDiscount); // Add to canvas
 
     theAction.setBounds( 110, 25 , 270, 20 );       // Message area
     theAction.setText( "" );                        // Blank
@@ -96,6 +111,9 @@ public class CashierView implements Observer
     theSP.getViewport().add( theOutput );           //  In TextArea
     rootWindow.setVisible( true );                  // Make visible
     theInput.requestFocus();                        // Focus is here
+    
+    setLightModeColors(cp);
+    
   }
 
   /**
@@ -128,4 +146,42 @@ public class CashierView implements Observer
     theInput.requestFocus();               // Focus is here
   }
 
+//Toggle Dark Mode
+private void toggleDarkMode(Container cp) {
+   isDarkMode = !isDarkMode; // Toggle dark mode state
+
+   // Update colors based on the mode
+   if (isDarkMode) {
+       setDarkModeColors(cp);
+       theBtDarkMode.setText("Light Mode"); // Update button label
+   } else {
+       setLightModeColors(cp);
+       theBtDarkMode.setText("Dark Mode"); // Update button label
+   }
+}
+
+//Set colors for Dark Mode
+private void setDarkModeColors(Container cp) {
+   pageTitle.setForeground(Color.WHITE);
+   theAction.setForeground(Color.WHITE);
+   theInput.setBackground(Color.BLACK);
+   theInput.setForeground(Color.WHITE);
+   theOutput.setBackground(Color.BLACK);
+   theOutput.setForeground(Color.WHITE);
+   theSP.setBackground(Color.BLACK);
+   cp.setBackground(Color.DARK_GRAY);
+}
+
+//Set colors for Light Mode
+private void setLightModeColors(Container cp) {
+   pageTitle.setForeground(Color.BLACK);
+   theAction.setForeground(Color.BLACK);
+   theInput.setBackground(Color.WHITE);
+   theInput.setForeground(Color.BLACK);
+   theOutput.setBackground(Color.WHITE);
+   theOutput.setForeground(Color.BLACK);
+   theSP.setBackground(Color.WHITE);
+   cp.setBackground(Color.decode("#eeeeee"));
+}
+  
 }
